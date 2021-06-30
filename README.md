@@ -16,7 +16,7 @@ API Endpoint -
 ```javascript 
     path-to-server/api/scrape
 
-    // R equest Type = POST
+    // Request Type = POST
     // Request Body 
     {
         "url": "your-preffered-url"
