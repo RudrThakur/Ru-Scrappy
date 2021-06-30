@@ -6,10 +6,13 @@ const got = require("got");
 
 const app = express();
 
-const url =
-  "https://www.indiatoday.in/coronavirus-outbreak/vaccine-updates/story/bharat-biotech-covaxin-effectively-neutralises-delta-variant-covid-top-us-research-institute-1820978-2021-06-30";
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
+app.post("/api/scrape", (req, res) => {
+
+  const url = req.body.url;
+
   got(url)
     .then((response) => {
       const $ = cheerio.load(response.body);
