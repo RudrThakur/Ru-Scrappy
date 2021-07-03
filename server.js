@@ -89,6 +89,60 @@ app.post("/api/scrape", (req, res) => {
 });
 
 /**
+ * Version 2
+ */
+
+app.get("/api/scrape/v2", (req, res) => {
+  const url = response.body.url;
+
+  got(url)
+    .then((response) => {
+      const $ = cheerio.load(response.body);
+
+      const title = $("title").text();
+
+      var text = "";
+
+      /**
+       * Pick Headings
+       */
+
+      $("h1, h2, h3, h4, h5, h6").map((index, element) => {
+        const content = $(element).text();
+
+        if (
+          content.trim() && // No Whitespaces
+          content.split(" ").length > 3 // More than 2 words
+        )
+          text = text + " " + content;
+      });
+
+      /**
+       * Pick Paragraphs
+       */
+
+      $("body p").map((index, element) => {
+        const content = $(element).text();
+
+        if (content.trim() && content.split(" ").length > 3)
+          text = text + " " + content;
+      });
+
+      text = text.replace(/[\"]/gi, "");
+      text = text.trim();
+
+      return res.json({
+        url: url,
+        title: title || "",
+        text: text || "",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+/**
  * use unfluff
  */
 
@@ -109,20 +163,20 @@ app.post("/api/scrape/unfluff", (req, res) => {
  */
 
 app.post("/api/scrape/jsdom", (req, res) => {
-
   const url = req.body.url;
 
   got(url).then((response) => {
     const html_content = response.body;
 
-    const title = jsdom.JSDOM.fragment(html_content).querySelector("title").textContent;
+    const title =
+      jsdom.JSDOM.fragment(html_content).querySelector("title").textContent;
 
     const html_text = jsdom.JSDOM.fragment(html_content).textContent;
 
     return res.json({
       url: url,
       title: title || "",
-      text: html_text || ""
+      text: html_text || "",
     });
   });
 });
