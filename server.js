@@ -92,8 +92,8 @@ app.post("/api/scrape", (req, res) => {
  * Version 2
  */
 
-app.get("/api/scrape/v2", (req, res) => {
-  const url = response.body.url;
+app.post("/api/scrape/v2", (req, res) => {
+  const url = req.body.url;
 
   got(url)
     .then((response) => {
