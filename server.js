@@ -4,13 +4,16 @@ const cheerio = require("cheerio");
 
 const got = require("got");
 
+const unfluff = require("unfluff");
+
+const jsdom = require("jsdom");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.post("/api/scrape", (req, res) => {
-
   const url = req.body.url;
 
   got(url)
@@ -62,9 +65,9 @@ app.post("/api/scrape", (req, res) => {
 
       $("body img").map((index, element) => {
         const tag = element.name;
-        const content = $(element).attr('src');
-        const alt = $(element).attr('alt');
-        
+        const content = $(element).attr("src");
+        const alt = $(element).attr("alt");
+
         images.push({
           tag: tag,
           content: content,
@@ -83,6 +86,45 @@ app.post("/api/scrape", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+/**
+ * use unfluff
+ */
+
+app.post("/api/scrape/unfluff", (req, res) => {
+  const url = req.body.url;
+
+  got(url).then((response) => {
+    const html_content = response.body;
+
+    const content_parsed = unfluff(html_content);
+
+    return res.json(content_parsed);
+  });
+});
+
+/**
+ * use JSDOM
+ */
+
+app.post("/api/scrape/jsdom", (req, res) => {
+
+  const url = req.body.url;
+
+  got(url).then((response) => {
+    const html_content = response.body;
+
+    const title = jsdom.JSDOM.fragment(html_content).querySelector("title").textContent;
+
+    const html_text = jsdom.JSDOM.fragment(html_content).textContent;
+
+    return res.json({
+      url: url,
+      title: title || "",
+      text: html_text || ""
+    });
+  });
 });
 
 const PORT = process.env.PORT || 5000;
