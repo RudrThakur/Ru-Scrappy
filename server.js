@@ -104,18 +104,33 @@ app.post("/api/scrape/v2", (req, res) => {
       var text = "";
 
       /**
-       * Pick Headings
+       * Remove unwanted tags
        */
 
-      $("h1, h2, h3, h4, h5, h6").map((index, element) => {
-        const content = $(element).text();
+      //  Header
 
-        if (
-          content.trim() && // No Whitespaces
-          content.split(" ").length > 3 // More than 2 words
-        )
-          text = text + " " + content;
-      });
+      $("header").remove();
+      $("#header").remove();
+      $(".header").remove();
+
+      // Hyperlinks
+
+      $("a").remove();
+
+      // Aside
+
+      $("aside").remove();
+
+      // Sidebars
+
+      $("#sidebar").remove();
+      $(".sidebar").remove();
+
+      // Footer
+
+      $("footer").remove();
+      $("#footer").remove();
+      $(".footer").remove();
 
       /**
        * Pick Paragraphs
@@ -128,7 +143,6 @@ app.post("/api/scrape/v2", (req, res) => {
           text = text + " " + content;
       });
 
-      text = text.replace(/[\"]/gi, "");
       text = text.trim();
 
       return res.json({

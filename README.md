@@ -4,9 +4,13 @@ NodeJS | Cheerio | Web Scraper
 ## Installation
 
 ```bash
+
 npm install express
 npm install cheerio
 npm install got
+npm install unfluff
+npm install jsdom
+
 ```
 
 ## Example
