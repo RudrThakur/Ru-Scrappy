@@ -5,11 +5,8 @@ NodeJS | Cheerio | Web Scraper
 
 ```bash
 
-npm install express
-npm install cheerio
-npm install got
-npm install unfluff
-npm install jsdom
+npm install
+npm run start
 
 ```
 

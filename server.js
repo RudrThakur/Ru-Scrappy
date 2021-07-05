@@ -132,6 +132,24 @@ app.post("/api/scrape/v2", (req, res) => {
       $("#footer").remove();
       $(".footer").remove();
 
+      // Tables
+
+      $("table").remove();
+      $(".table").remove();
+      $("#table").remove();
+
+      // Iframes
+
+      $("iframe").remove();
+      $(".iframe").remove();
+      $("#iframe").remove();
+
+      // Images
+      
+      $("img").remove();
+      $(".img").remove();
+      $("#img").remove();
+
       /**
        * Pick Paragraphs
        */
