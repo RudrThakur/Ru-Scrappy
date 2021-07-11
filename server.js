@@ -175,6 +175,93 @@ app.post("/api/scrape/v2", (req, res) => {
 });
 
 /**
+ * Version 3
+ */
+
+app.post("/api/scrape/v3", (req, res) => {
+  const url = req.body.url;
+
+  got(url)
+    .then((response) => {
+      const $ = cheerio.load(response.body);
+
+      const title = $("title").text();
+
+      var text = "";
+
+      /**
+       * Remove Unwanted Elements
+       *
+       * eg: Navbar, Footer, Tables, Images etc.
+       */
+
+      $("head").remove();
+      $(".header").remove();
+      $("#header").remove();
+
+      $("nav").remove();
+      $(".nav").remove();
+      $("#nav").remove();
+
+      $(".navbar").remove();
+      $("#navbar").remove();
+      $(".topnav").remove();
+      $("#topnav").remove();
+
+      $(".sidebar").remove();
+      $("#sidebar").remove();
+      $(".sidenav").remove();
+      $("#sidenav").remove();
+
+      $("aside").remove();
+
+      $("img").remove();
+      $(".img").remove();
+
+      $("table").remove();
+      $(".table").remove();
+
+      $("iframe").remove();
+
+      $("footer").remove();
+      $(".footer").remove();
+      $("#footer").remove();
+
+      /**
+       *  Pick Text of elements inside body
+       */
+
+      $("body")
+        .find("*")
+        .map((index, element) => {
+          // Check if the element is a text node
+
+          const isTextNode = $(element)
+            .contents()
+            .filter(function () {
+              return this.nodeType == 3;
+            });
+
+          if (isTextNode) {
+            // Get the content of the text node
+            const content = $(element).text().trim();
+
+            text = text + " " + content;
+          }
+        });
+
+      return res.json({
+        url: url,
+        title: title || "",
+        text: text || "",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+/**
  * use unfluff
  */
 

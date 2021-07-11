@@ -32,6 +32,9 @@ path-to-server/api/scrape
 // version 2
 path-to-server/api/scrape/v2
 
+// version 3
+path-to-server/api/scrape/v3
+
 // use unfluff
 path-to-server/api/scrape/unfluff
 
